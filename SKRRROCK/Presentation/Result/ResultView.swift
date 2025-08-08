@@ -33,7 +33,7 @@ struct ResultView: View {
                             .font(.system(size: 17, weight: .medium))
                             .foregroundColor(.white)
                         
-                        Text("90")
+                        Text("\(viewModel.score)")
                             .font(.system(size: 80, weight: .bold))
                             .foregroundColor(.white)
                     }
@@ -41,14 +41,14 @@ struct ResultView: View {
                 
                 // MARK: 점수대 별 멘트 
                 VStack(spacing: 4) {
-                    Text("완전 똑같은데?")
+                    Text(viewModel.getFirstMessage())
                         .font(.system(size: 32, weight: .medium))
-                    Text("당신 혹시 체리 아니에요?")
+                    Text(viewModel.getSecondMessage())
                         .font(.system(size: 20, weight: .regular))
                 }
                 .foregroundColor(.white)
                 
-                Image("dance_1")
+                Image(viewModel.getDanceImageName())
                     .resizable()
                     .scaledToFit()
                     .frame(width: 256)
@@ -64,6 +64,7 @@ struct ResultView: View {
 
 #Preview {
     let viewModel = DefaultResultViewModel()
-
-    ResultView(viewModel: viewModel)
+    viewModel.score = 85
+    viewModel.targetLearnerName = "광로"
+    return ResultView(viewModel: viewModel)
 }

@@ -13,6 +13,7 @@ protocol ResultViewModel {
     var targetLearnerName: String { get set }
     func getFirstMessage() -> String
     func getSecondMessage() -> String
+    func getDanceImageName() -> String
 }
 
 @Observable
@@ -72,5 +73,20 @@ class DefaultResultViewModel: ResultViewModel {
         default:
             return "포기하지 말고 다시 도전!"
         }
+    }
+    
+    func getDanceImageName() -> String {
+        let learnerMapping: [String: String] = [
+            "광로": "gwangro",
+            "세나": "sena",
+            "에디": "eddey",
+            "체리": "cherry"
+        ]
+
+        if let rawValue = learnerMapping[targetLearnerName] {
+            return "\(rawValue)_dance"
+        }
+
+        return "dance_1"
     }
 }
