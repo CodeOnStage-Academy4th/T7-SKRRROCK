@@ -35,8 +35,6 @@ struct ResultView: View {
                 
                         
                         Text("\(viewModel.score)")
-                            .stroke(Color.white, lineWidth: 4)
-                            .tracking(4)
                             .font(.system(size: 80, weight: .bold))
                             .foregroundStyle(
                                 LinearGradient(
