@@ -83,12 +83,23 @@ struct DTW {
             }
         }
 
+//        // 경로 길이를 고려하여 거리를 정규화한다.
+//        let distance = dtw[m][n] / Float(m + n)
+//
+//        // 정규화된 거리를 기반으로 유사도 점수를 계산한다 (0에 가까울수록 100점).
+//        // 거리가 1을 초과하는 경우 0점으로 처리하여 안정성을 높인다.
+//        let similarityPercent = max(0, 1 - distance) * 100
+//
+//        return similarityPercent
+
         // 경로 길이를 고려하여 거리를 정규화한다.
         let distance = dtw[m][n] / Float(m + n)
 
-        // 정규화된 거리를 기반으로 유사도 점수를 계산한다 (0에 가까울수록 100점).
-        // 거리가 1을 초과하는 경우 0점으로 처리하여 안정성을 높인다.
-        let similarityPercent = max(0, 1 - distance) * 100
+        // --- ⬇️ 수정된 부분 ⬇️ ---
+        // 유사도 변환 공식을 '1 / (1 + distance)' 형태로 변경하여
+        // 0 이상의 모든 거리 값을 0~100점 사이로 안정적으로 변환한다.
+        let similarityPercent = 100 / (1 + distance)
+        // --- 수정 완료 ---
 
         return similarityPercent
     }

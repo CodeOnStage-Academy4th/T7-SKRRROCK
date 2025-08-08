@@ -59,14 +59,17 @@ class LaughAnalyzerDev {
         guard let channelData = buffer.floatChannelData?[0] else { return }
 
 //        // --- MFCC 계산 설정 활성화 ---
-//        let nMFCC = 13 // 추출할 MFCC 계수 개수
-//        let nFFT = 2048 // FFT 윈도우 크기
-//        let melFilterBank = createMelFilterbank(nfft: nFFT, nfilts: 40, sampleRate: Float(sampleRate))
-//        print("--- Mel Filter Bank Created ---")
-//        guard let dctSetup = vDSP_DCT_CreateSetup(nil,
-//                                                  vDSP_Length(40),
-//                                                  .II) else { return }
-//        print("--- DCT Setup Created ---")
+        let nMFCC = 13 // 추출할 MFCC 계수 개수
+        let nFFT = 2048 // FFT 윈도우 크기
+        let nfilts = 32 // 멜 필터 개수를 40에서 32(2의 5제곱)로 변경
+        let melFilterBank = createMelFilterbank(nfft: nFFT, nfilts: nfilts, sampleRate: Float(sampleRate))
+
+        // dctSetup의 count도 nfilts와 동일하게 32로 변경
+        guard let dctSetup = vDSP.DCT(count: nfilts, transformType: .II) else {
+            print("--- DCT Setup Failed: The provided parameters are likely invalid. ---")
+            return
+        }
+        print("--- DCT Setup Created ---")
 //        // --- 수정된 부분 종료 ---
 
         var tempVolumeData: [Float] = []
@@ -83,10 +86,11 @@ class LaughAnalyzerDev {
             let pitch: Float = (rms > rmsThreshold) ? calculatePitch(buffer: subBuffer, sampleRate: sampleRate) : 0
 
 //            // --- MFCC 계산 로직 활성화 ---
-//            var mfcc: [Float] = []
-//            if rms > rmsThreshold { // 유의미한 소리일 때만 MFCC 계산
-//                mfcc = calculateMFCC(buffer: subBuffer, nMFCC: nMFCC, nFFT: nFFT, melFilterBank: melFilterBank, dctSetup: dctSetup)
-//            }
+            var mfcc: [Float] = []
+            if rms > rmsThreshold {
+                // 수정된 dctSetup 타입을 받는 calculateMFCC 함수를 호출한다.
+                mfcc = calculateMFCC(buffer: subBuffer, nMFCC: nMFCC, nFFT: nFFT, melFilterBank: melFilterBank, dctSetup: dctSetup)
+            }
 //
 //            // --- [디버깅 로그 2] ---
 //            // 각 프레임(step)마다 계산된 주요 값들을 출력한다.
@@ -102,9 +106,9 @@ class LaughAnalyzerDev {
             tempPitchData.append(pitch)
 
             // MFCC 결과가 비어있지 않을 때만 추가
-//            if !mfcc.isEmpty {
-//                tempMfccData.append(mfcc)
-//            }
+            if !mfcc.isEmpty {
+                tempMfccData.append(mfcc)
+            }
         }
 
         let finalLaughSpeed = calculateLaughSpeed(from: tempVolumeData, step: step)
@@ -221,8 +225,6 @@ class LaughAnalyzerDev {
 
         var realp = [Float](repeating: 0, count: nFFT / 2)
         var imagp = [Float](repeating: 0, count: nFFT / 2)
-
-        // --- 최종 반환 값을 저장할 변수 ---
         var finalMfccs = [Float](repeating: 0, count: nMFCC)
 
         realp.withUnsafeMutableBufferPointer { realpBuffer in
@@ -250,7 +252,7 @@ class LaughAnalyzerDev {
                 var initialPower: Float = 1.0
                 vDSP_vdbcon(melEnergies, 1, &initialPower, &logMelEnergies, 1, vDSP_Length(melFilterBank.count), 1)
 
-                // 6. DCT (MFCC 계산)
+                // 6. DCT - vDSP.DCT 객체의 transform 메서드 사용
                 var mfccs = [Float](repeating: 0, count: melFilterBank.count)
                 dctSetup.transform(logMelEnergies, result: &mfccs)
 
@@ -258,14 +260,9 @@ class LaughAnalyzerDev {
                 let lifterCepstralCoefficients = 1 ... nMFCC
                 let lifter = lifterCepstralCoefficients.map { 1.0 + (Float(nMFCC) / 2.0) * sin(Float.pi * Float($0) / Float(nMFCC)) }
 
-                // --- 수정된 부분 시작 ---
-                // 클로저 외부의 'finalMfccs' 변수에 최종 결과를 할당한다.
                 vDSP_vmul(Array(mfccs.prefix(nMFCC)), 1, lifter, 1, &finalMfccs, 1, vDSP_Length(nMFCC))
-                // --- 수정된 부분 종료 ---
             }
         }
-
-        // 클로저 내에서 계산된 최종 결과를 반환한다.
         return finalMfccs
     }
 

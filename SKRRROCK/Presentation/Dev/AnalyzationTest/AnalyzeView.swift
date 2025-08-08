@@ -31,7 +31,7 @@ struct AnalyzeView: View {
                 .font(.headline)
                 .padding()
 
-            GraphView(data: analyzer.targetResult.volumeData, label: "Volume (RMS)")
+            MFCCGraphView(data: analyzer.targetResult.mfccData, label: "MFCC")
             GraphView(data: analyzer.targetResult.pitchData, label: "Pitch (Hz)")
 
             Divider().padding()
@@ -52,7 +52,7 @@ struct AnalyzeView: View {
                 .font(.headline)
                 .padding()
 
-            GraphView(data: analyzer.userResult.volumeData, label: "Volume (RMS)")
+            MFCCGraphView(data: analyzer.userResult.mfccData, label: "MFCC")
             GraphView(data: analyzer.userResult.pitchData, label: "Pitch (Hz)")
 
             Divider().padding()
@@ -60,25 +60,46 @@ struct AnalyzeView: View {
             Button("Compare") {
                 let dtw = DTW()
 
-                // --- 1. MFCC 데이터로 음색(Timbre) 유사도 계산 ---
+                // --- 1. MFCC 데이터로 음색 유사도 계산 ---
 
-                // 두 MFCC 벡터 간의 '유클리드 제곱 거리'를 계산하는 함수를 정의한다.
-                // vDSP 라이브러리를 사용해 효율적으로 연산한다.
-                let euclideanDistanceSquared: ([Float], [Float]) -> Float = { a, b in
-                    guard a.count == b.count else { return Float.infinity }
-                    var sum: Float = 0
-                    vDSP_distancesq(a, 1, b, 1, &sum, vDSP_Length(a.count))
-                    return sum
-                }
+                // 두 MFCC 벡터 간의 '유클리드 제곱 거리'를 계산하는 함수를 정의합니다.
+                // vDSP 라이브러리를 사용하면 효율적으로 연산할 수 있습니다.
+                let cosineDistance: ([Float], [Float]) -> Float = { a, b in
+                        guard a.count == b.count, !a.isEmpty else { return 2.0 } // 2.0은 최대 거리
 
-                // 제네릭으로 개선된 dtwSimilarity 함수를 호출한다.
-                // x, y에는 MFCC 데이터([[Float]])를, dist에는 위에서 정의한 유클리드 거리 함수를 전달한다.
+                        var dotProduct: Float = 0
+                        var normA: Float = 0
+                        var normB: Float = 0
+                        
+                        // vDSP를 사용하여 내적(dot product)과 각 벡터의 크기(norm)를 효율적으로 계산합니다.
+                        vDSP_dotpr(a, 1, b, 1, &dotProduct, vDSP_Length(a.count))
+                        vDSP_svesq(a, 1, &normA, vDSP_Length(a.count))
+                        vDSP_svesq(b, 1, &normB, vDSP_Length(b.count))
+                        
+                        normA = sqrt(normA)
+                        normB = sqrt(normB)
+                        
+                        // 분모가 0이 되는 것을 방지합니다.
+                        guard normA > 0, normB > 0 else { return 2.0 }
+                        
+                        // 코사인 유사도를 계산합니다: (A · B) / (||A|| * ||B||)
+                        let similarity = dotProduct / (normA * normB)
+                        
+                        // 코사인 거리를 반환합니다: 1 - 유사도. (거리는 0~2 사이의 값을 가집니다)
+                        return 1 - similarity
+                    }
+
+                // 제네릭으로 개선된 dtwSimilarity 함수를 호출합니다.
+                // x, y에는 MFCC 데이터([[Float]])를, dist에는 위에서 정의한 유클리드 거리 함수를 전달합니다.
                 let mfccResult = dtw.dtwSimilarity(
                     x: analyzer.targetResult.mfccData,
                     y: analyzer.userResult.mfccData,
-                    dist: euclideanDistanceSquared,
-                    targetLength: 100 // MFCC는 프레임 수가 적으므로 targetLength를 적절히 조절한다.
+                    dist: cosineDistance
                 )
+//                print("-----------")
+//                print(analyzer.targetResult.mfccData)
+//                print(analyzer.userResult.mfccData)
+//                print("-----------")
 
                 // 1. targetResult와 userResult의 pitchData에서 0이 아닌 값만 필터링합니다.
                 let filteredTargetPitch = analyzer.targetResult.pitchData.filter { $0 > 0 }
