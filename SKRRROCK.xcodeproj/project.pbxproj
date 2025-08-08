@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E3D7EE312E465A26003311C0 /* Exceptions for "SKRRROCK" folder in "SKRRROCK" target */ = {
+		E3D7F21D2E4694B6003311C0 /* Exceptions for "SKRRROCK" folder in "SKRRROCK" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +24,7 @@
 		E30080A62E46136C00C11F29 /* SKRRROCK */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				E3D7EE312E465A26003311C0 /* Exceptions for "SKRRROCK" folder in "SKRRROCK" target */,
+				E3D7F21D2E4694B6003311C0 /* Exceptions for "SKRRROCK" folder in "SKRRROCK" target */,
 			);
 			path = SKRRROCK;
 			sourceTree = "<group>";
@@ -264,7 +264,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = L8QX5LU28U;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SKRRROCK/Info.plist;
@@ -299,7 +299,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = L8QX5LU28U;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SKRRROCK/Info.plist;
