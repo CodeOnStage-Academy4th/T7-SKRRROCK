@@ -45,7 +45,7 @@ struct DTW {
     ///   - dist: 두 요소(T 타입) 사이의 거리를 계산하는 함수
     ///   - targetLength: DTW 계산 전 시퀀스를 리사이징할 목표 길이
     /// - Returns: 0과 100 사이의 유사도 점수
-    func dtwSimilarity<T>(x: [T], y: [T], dist: (T, T) -> Float, targetLength: Int = 100) -> Float {
+    func dtwSimilarity<T>(x: [T], y: [T], dist: (T, T) -> Float, targetLength: Int = 100, sensitivity: Float = 1.0) -> Float {
         guard !x.isEmpty, !y.isEmpty else { return 0 }
 
         // 데이터 타입에 따른 선형 보간 로직을 정의한다.
@@ -98,16 +98,15 @@ struct DTW {
         // --- ⬇️ 수정된 부분 ⬇️ ---
         // 유사도 변환 공식을 '1 / (1 + distance)' 형태로 변경하여
         // 0 이상의 모든 거리 값을 0~100점 사이로 안정적으로 변환한다.
-        let similarityPercent = 100 / (1 + distance)
+        let similarityPercent = 100 * exp(-sensitivity * distance)
         // --- 수정 완료 ---
 
         return similarityPercent
     }
 
-    /// `[Float]` 타입 배열을 위한 편의(convenience) 함수이다.
-    /// 내부적으로 제네릭 `dtwSimilarity` 함수를 호출하며, 거리 계산법으로는 두 값의 차의 절댓값을 사용한다.
-    func dtwSimilarity(x: [Float], y: [Float], targetLength: Int = 100) -> Float {
+    /// `[Float]` 타입 배열을 위한 편의 함수입니다.
+    func dtwSimilarity(x: [Float], y: [Float], targetLength: Int = 100, sensitivity: Float = 1.0) -> Float {
         let floatDistance = { (a: Float, b: Float) -> Float in abs(a - b) }
-        return dtwSimilarity(x: x, y: y, dist: floatDistance, targetLength: targetLength)
+        return dtwSimilarity(x: x, y: y, dist: floatDistance, targetLength: targetLength, sensitivity: sensitivity)
     }
 }

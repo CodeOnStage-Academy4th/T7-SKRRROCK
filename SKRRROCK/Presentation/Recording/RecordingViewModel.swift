@@ -50,8 +50,6 @@ class DefaultRecordingViewModel: RecordingViewModel {
     func stopRecording() {
         do {
             audioData = try audioRecorder.stopRecording()
-            
-            try? DefaultAudioPlayer().playAudio(audio: audioData!)
         } catch {
             print("Failed to stop recording: \(error)")
         }

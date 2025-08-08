@@ -46,12 +46,10 @@ class LaughAnalyzerDev {
         print("------------------------------------")
 
         // 결과 초기화
-        DispatchQueue.main.async {
-            if isTarget {
-                self.targetResult = .init()
-            } else {
-                self.userResult = .init()
-            }
+        if isTarget {
+            targetResult = .init()
+        } else {
+            userResult = .init()
         }
 
         let step = 2048
@@ -124,18 +122,16 @@ class LaughAnalyzerDev {
         print("------------------------------------")
 
         // 분석 결과 한 번에 업데이트
-        DispatchQueue.main.async {
-            if isTarget {
-                self.targetResult.volumeData = tempVolumeData
-                self.targetResult.pitchData = tempPitchData
-                self.targetResult.mfccData = tempMfccData // MFCC 결과 저장 활성화
-                self.targetResult.laughSpeed = finalLaughSpeed
-            } else {
-                self.userResult.volumeData = tempVolumeData
-                self.userResult.pitchData = tempPitchData
-                self.userResult.mfccData = tempMfccData // MFCC 결과 저장 활성화
-                self.userResult.laughSpeed = finalLaughSpeed
-            }
+        if isTarget {
+            targetResult.volumeData = tempVolumeData
+            targetResult.pitchData = tempPitchData
+            targetResult.mfccData = tempMfccData // MFCC 결과 저장 활성화
+            targetResult.laughSpeed = finalLaughSpeed
+        } else {
+            userResult.volumeData = tempVolumeData
+            userResult.pitchData = tempPitchData
+            userResult.mfccData = tempMfccData // MFCC 결과 저장 활성화
+            userResult.laughSpeed = finalLaughSpeed
         }
     }
 
