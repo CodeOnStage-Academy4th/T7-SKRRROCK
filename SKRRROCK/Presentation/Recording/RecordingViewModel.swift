@@ -1,5 +1,5 @@
 //
-//  RecordViewModel.swift
+//  RecordingViewModel.swift
 //  SKRRROCK
 //
 //  Created by 정희균 on 8/8/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-protocol RecordViewModel {
+protocol RecordingViewModel {
   var isRecording: Bool { get }
 
   func startRecording()
@@ -15,7 +15,7 @@ protocol RecordViewModel {
 }
 
 @Observable
-class DefaultRecordViewModel: RecordViewModel {
+class DefaultRecordingViewModel: RecordingViewModel {
   var isRecording: Bool {
     audioRecorder.isRecording
   }
