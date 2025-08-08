@@ -189,7 +189,7 @@ class DefaultResultViewModel: ResultViewModel {
             x: analyzer.targetResult.mfccData,
             y: analyzer.userResult.mfccData,
             dist: cosineDistance
-        )
+        ) + 5
         //                print("-----------")
         //                print(analyzer.targetResult.mfccData)
         //                print(analyzer.userResult.mfccData)
@@ -217,8 +217,7 @@ class DefaultResultViewModel: ResultViewModel {
             pitchResult = dtw.dtwSimilarity(
                 x: normalizedTargetPitch,
                 y: normalizedUserPitch,
-                targetLength: 500,
-                sensitivity: 5.0
+                targetLength: 200
             )
         } else {
             pitchResult = 0.0
@@ -230,7 +229,7 @@ class DefaultResultViewModel: ResultViewModel {
         print("Pitch DTW Result: \(String(format: "%.2f", pitchResult))점")
         print("Speed Distance Result: \(speedResult) 점")
 
-        let finalScore = mfccResult * 0.3 + pitchResult * 0.3 + speedResult * 0.4
+        let finalScore = mfccResult * 0.4 + pitchResult * 0.4 + speedResult * 0.2
 
         score = Int(finalScore.rounded())
     }
