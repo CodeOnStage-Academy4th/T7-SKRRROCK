@@ -11,7 +11,8 @@ import SwiftUI
 struct SKRRROCKApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+//            ContentView()
+            RecordPlayTestView(viewModel: DefaultRecordPlayTestViewModel())
         }
     }
 }
