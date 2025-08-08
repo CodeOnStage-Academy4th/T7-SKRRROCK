@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "GoldMedal.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
