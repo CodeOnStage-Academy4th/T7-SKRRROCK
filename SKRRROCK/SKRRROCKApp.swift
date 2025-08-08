@@ -12,7 +12,7 @@ import SwiftUI
 struct SKRRROCKApp: App {
     var body: some Scene {
         WindowGroup {
-            SwiftDataTestView()
+            ContentView()
         }
         .modelContainer(for: [TargetLearner.self, ShadowingRecord.self]) { result in
             switch result {
