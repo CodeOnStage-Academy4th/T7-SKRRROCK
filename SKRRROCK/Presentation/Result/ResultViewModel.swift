@@ -140,7 +140,8 @@ class DefaultResultViewModel: ResultViewModel {
   func analyzeRecord() {
     self.isLoading = true
 
-    defer {
+    Task {
+      try? await Task.sleep(for: .seconds(3))
       self.isLoading = false
     }
 

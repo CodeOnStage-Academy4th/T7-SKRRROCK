@@ -38,17 +38,14 @@ struct GradientLoading: View {
           ZStack {
             Circle()
               .trim(from: 0, to: 0.2)
-              .fill(.black)
+              .fill(.clear)
+              .stroke(.white, style: StrokeStyle(lineWidth: 10, lineCap: .round))
               .padding(padding)
               .rotationEffect(Angle(radians: angle))
           }
         }
       }
-      Circle()
-        .fill(color)
-        .padding(padding)
     }
-    .blur(radius: 12)
     .frame(maxWidth: size, maxHeight: size)
   }
 }
