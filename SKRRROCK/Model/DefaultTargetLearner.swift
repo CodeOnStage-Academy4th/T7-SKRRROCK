@@ -21,10 +21,10 @@ enum DefaultTargetLearner: String, CaseIterable {
     
     var emoji: String {
         switch self {
-        case .gwangro: return "gwangro"
-        case .sena: return "sena"
-        case .eddey: return "eddey"
-        case .cherry: return "cherry"
+        case .gwangro: return "Gwangro"
+        case .sena: return "Sena"
+        case .eddey: return "Eddey"
+        case .cherry: return "Cherry"
         }
     }
     

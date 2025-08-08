@@ -1,5 +1,5 @@
 //
-//  PersonalPageView.swift
+//  ScoreBoardView.swift
 //  SKRRROCK
 //
 //  Created by 정희균 on 8/9/25.
@@ -7,33 +7,23 @@
 
 import SwiftUI
 
-struct PersonalPageView: View {
-  @State private var viewModel: PersonalPageViewModel
-
-  init(viewModel: PersonalPageViewModel) {
+struct ScoreBoardView: View {
+  @State private var viewModel: ScoreBoardViewModel
+  
+  init(viewModel: ScoreBoardViewModel) {
     self._viewModel = State(wrappedValue: viewModel)
   }
-
+  
   var body: some View {
     ZStack {
       ColorTokens.slate800
         .ignoresSafeArea()
-
-      VStack(spacing: 20) {
-        HomePersonGridItem(
-          name: viewModel.targetLearner.name,
-          image: viewModel.targetLearner.emoji
-        )
-        .frame(maxWidth: 171)
-
-        if viewModel.isPlaying {
-          LargeButton(title: "재생중...", systemImage: "waveform") {}
-            .disabled(true)
-        } else {
-          LargeButton(title: "웃음 듣기", systemImage: "play") {
-            viewModel.playAudio()
-          }
-        }
+      
+      VStack {
+        Text("Ranking Board")
+          .font(FontTokens.headingMdMedium)
+        Text("나의 점수는 몇 점? 여기에서 확인하ROCK!")
+          .font(FontTokens.bodyLgRegular)
 
         VStack(spacing: 24) {
           Text("RANKING")
@@ -81,12 +71,13 @@ struct PersonalPageView: View {
         .padding(.vertical, 24)
         .frame(maxWidth: .infinity, maxHeight: 320)
         .gradientBackground()
-
-        LargeButton(title: "따라하기", systemImage: "mic", colored: true) {
-          viewModel.navigateToRecording()
+        
+        LargeButton(title: "홈으로", systemImage: "house") {
+          viewModel.navigateToHome()
         }
       }
-      .padding(.horizontal, 40)
+      .foregroundStyle(ColorTokens.white)
+      .padding()
     }
   }
 }
@@ -106,10 +97,10 @@ struct PersonalPageView: View {
     .init(userName: "Test5", finalScore: 95, targetLearner: targetLearner),
     .init(userName: "Test6", finalScore: 99, targetLearner: targetLearner),
   ]
-
-  let viewModel: PersonalPageViewModel = DefaultPersonalPageViewModel(
-    targetLearner: targetLearner
-  )
-
-  return PersonalPageView(viewModel: viewModel)
+  
+  let scoreBoardViewData = ScoreBoardViewData(targetLearner: targetLearner)
+  
+  let viewModel: ScoreBoardViewModel = DefaultScoreBoardViewModel(scoreBoardViewData: scoreBoardViewData)
+  
+  return ScoreBoardView(viewModel: viewModel)
 }
