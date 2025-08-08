@@ -15,7 +15,7 @@ class ShadowingRecord {
     var finalScore: Int
     var targetLearner: TargetLearner // 어떤 러너의 웃음을 따라하였는가?
     
-    init(id: UUID, userName: String, finalScore: Int, targetLearner: TargetLearner) {
+    init(userName: String, finalScore: Int, targetLearner: TargetLearner) {
         self.id = UUID()
         self.userName = userName
         self.finalScore = finalScore

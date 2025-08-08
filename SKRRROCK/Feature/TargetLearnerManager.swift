@@ -15,7 +15,7 @@ class TargetLearnerManager {
         self.context = context
     }
     
-    func setupDefaultLearners(context: ModelContext) {
+    static func setupDefaultLearners(context: ModelContext) {
         let descriptor = FetchDescriptor<TargetLearner>()
         let existingCount = (try? context.fetchCount(descriptor)) ?? 0
 
