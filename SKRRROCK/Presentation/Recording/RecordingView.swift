@@ -35,6 +35,9 @@ struct RecordingView: View {
             .scaledToFit()
             .frame(maxWidth: 48, maxHeight: 48)
         }
+        .onTapGesture {
+          viewModel.navigateToResult()
+        }
 
         Text("웃음 녹음중...")
           .font(FontTokens.headingSmRegular)

@@ -12,6 +12,7 @@ protocol RecordingViewModel {
 
   func startRecording()
   func stopRecording()
+  func navigateToResult()
 }
 
 @Observable
@@ -25,6 +26,8 @@ class DefaultRecordingViewModel: RecordingViewModel {
   private let audioRecorder: AudioRecorder
 
   private let appCoordinator: AppCoordinator?
+  
+  private var audioData: Data?
 
   init(targetLearner: TargetLearner, appCoordinator: AppCoordinator? = nil) {
     self.targetLearner = targetLearner
@@ -32,6 +35,8 @@ class DefaultRecordingViewModel: RecordingViewModel {
     self.audioRecorder = DefaultAudioRecorder()
 
     self.appCoordinator = appCoordinator
+    
+    self.audioData = nil
   }
 
   func startRecording() {
@@ -44,9 +49,17 @@ class DefaultRecordingViewModel: RecordingViewModel {
 
   func stopRecording() {
     do {
-      try audioRecorder.stopRecording()
+      audioData = try audioRecorder.stopRecording()
     } catch {
       print("Failed to stop recording: \(error)")
     }
+  }
+  
+  func navigateToResult() {
+    stopRecording()
+    
+    let resultViewData = ResultViewData(targetLearner: targetLearner)
+    
+    appCoordinator?.push(.result(resultViewData))
   }
 }
