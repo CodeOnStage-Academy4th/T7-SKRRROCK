@@ -9,76 +9,124 @@ import Foundation
 import SwiftUI
 
 struct ResultView: View {
-    @State private var viewModel: ResultViewModel
+  @Environment(\.modelContext) private var context
+  
+  @State private var viewModel: ResultViewModel
 
-    init(viewModel: ResultViewModel) {
-        self._viewModel = State(wrappedValue: viewModel)
-    }
+  init(viewModel: ResultViewModel) {
+    self._viewModel = State(wrappedValue: viewModel)
+  }
 
-    var body: some View {
-        ZStack {
-            //TODO: 배경색 변경 필요
-            Color.black
-                .ignoresSafeArea()
+  var body: some View {
+    ZStack {
+      ColorTokens.slate800
+        .ignoresSafeArea()
+
+      VStack {
+        if viewModel.isLoading {
+          GradientLoading(size: 200, color: ColorTokens.slate800)
+        } else {
+          ZStack {
+            Image("scoreBackground")
+              .resizable()
+              .scaledToFit()
+              .padding(.horizontal, 90)
             
             VStack {
-                ZStack {
-                    Image("scoreBackground")
-                        .resizable()
-                        .scaledToFit()
-                        .padding(.horizontal, 90)
-                    
-                    VStack {
-                        Text("SCORE")
-                            .font(.system(size: 17, weight: .medium))
-                            .foregroundColor(.white)
-                
-                        
-                        Text("\(viewModel.score)")
-                            .font(.system(size: 80, weight: .bold))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    gradient: Gradient(stops: [
-                                        .init(color: Color(hex: "0900FF"), location: 0.0),
-                                        .init(color: Color(hex: "FF00FB"), location: 0.5),
-                                        .init(color: Color(hex: "00A6FF"), location: 1.0)
-                                    ]),
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                        
-                          
-                            
-                    }
-                }
-                
-                // MARK: 점수대 별 멘트 
-                VStack(spacing: 4) {
-                    Text(viewModel.getFirstMessage())
-                        .font(.system(size: 32, weight: .medium))
-                    Text(viewModel.getSecondMessage())
-                        .font(.system(size: 20, weight: .regular))
-                }
+              Text("SCORE")
+                .font(FontTokens.bodyLgMedium)
                 .foregroundColor(.white)
-                
-                Image(viewModel.getDanceImageName())
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 256)
-                
-                
-                HStack{
-                    //TODO: 버튼 컴포넌트 이용해서 다시하기 / 랭킹 등록 만들어야함
-                }
+              
+              Text("\(viewModel.score)")
+                .font(.custom(FontTokens.goormSansBold, size: 80))
+                .foregroundStyle(
+                  LinearGradient(
+                    gradient: Gradient(stops: [
+                      .init(color: Color(hex: "0900FF"), location: 0.0),
+                      .init(color: Color(hex: "FF00FB"), location: 0.5),
+                      .init(color: Color(hex: "00A6FF"), location: 1.0),
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                  )
+                )
             }
+          }
+          
+          // MARK: 점수대 별 멘트
+          VStack(spacing: 4) {
+            Text(viewModel.getFirstMessage())
+              .font(FontTokens.headingLgMedium)
+            Text(viewModel.getSecondMessage())
+              .font(FontTokens.headingSmRegular)
+          }
+          .foregroundColor(.white)
+          
+          Image(viewModel.getDanceImageName())
+            .resizable()
+            .scaledToFit()
+            .frame(width: 256)
+          
+          HStack {
+            LargeButton(title: "다시하기", systemImage: "arrow.counterclockwise") {
+              viewModel.retry()
+            }
+            
+            LargeButton(title: "랭킹 등록", systemImage: "bookmark", colored: true) {
+              viewModel.setIsShowingNicknameInput(true)
+            }
+            .alert(
+              "닉네임을 적어주세요.",
+              isPresented: Binding(
+                get: {
+                  viewModel.isShowingNicknameInput
+                },
+                set: {
+                  viewModel.setIsShowingNicknameInput($0)
+                }
+              )
+            ) {
+              TextField(
+                "닉네임",
+                text: Binding(
+                  get: {
+                    viewModel.nickname
+                  },
+                  set: {
+                    viewModel.setNickname($0)
+                  }
+                )
+              )
+              Button("취소", role: .cancel) {
+                viewModel.setIsShowingNicknameInput(false)
+              }
+              Button("등록") {
+                viewModel.uploadScore(context)
+              }
+              .disabled(viewModel.nickname.isEmpty)
+            }
+          }
         }
+      }
+      .padding()
     }
+    .onAppear {
+      viewModel.analyzeRecord()
+    }
+  }
 }
 
 #Preview {
-    let viewModel = DefaultResultViewModel()
-    viewModel.score = 36
-    viewModel.targetLearnerName = "광로"
-    return ResultView(viewModel: viewModel)
+  let gwangro = DefaultTargetLearner.gwangro
+  let targetLearner = TargetLearner(
+    name: gwangro.name,
+    emoji: gwangro.emoji,
+    laughAudioURL: gwangro.audioFileName
+  )
+
+  let viewModel = DefaultResultViewModel(
+    resultViewData: ResultViewData(targetLearner: targetLearner)
+  )
+
+  return ResultView(viewModel: viewModel)
 }
