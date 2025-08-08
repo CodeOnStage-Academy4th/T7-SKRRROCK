@@ -1,5 +1,5 @@
 //
-//  DefaultTargetLearnerSetup.swift
+//  TargetLearnerManager.swift
 //  SKRRROCK
 //
 //  Created by Jun on 8/9/25.
@@ -8,8 +8,14 @@
 import Foundation
 import SwiftData
 
-class DefaultTargetLearnerSetup {
-    static func setupDefaultLearners(context: ModelContext) {
+class TargetLearnerManager {
+    private let context: ModelContext
+    
+    init(context: ModelContext) {
+        self.context = context
+    }
+    
+    func setupDefaultLearners(context: ModelContext) {
         let descriptor = FetchDescriptor<TargetLearner>()
         let existingCount = (try? context.fetchCount(descriptor)) ?? 0
 
@@ -30,5 +36,10 @@ class DefaultTargetLearnerSetup {
                 print("TargetLearner 생성 실패: \(error)")
             }
         }
+    }
+    
+    func fetchAllTargetLearners() -> [TargetLearner] {
+        let descriptor = FetchDescriptor<TargetLearner>()
+        return (try? context.fetch(descriptor)) ?? []
     }
 }
