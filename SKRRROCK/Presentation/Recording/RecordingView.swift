@@ -41,11 +41,20 @@ struct RecordingView: View {
       }
       .foregroundStyle(ColorTokens.white)
     }
+    .onAppear {
+      viewModel.startRecording()
+    }
+    .onDisappear {
+      viewModel.stopRecording()
+    }
   }
 }
 
 #Preview {
-  let viewModel = DefaultRecordingViewModel(audioRecorder: MockAudioRecorder())
+  let gwangro = DefaultTargetLearner.gwangro
+  let targetLearner = TargetLearner(name: gwangro.name, emoji: gwangro.emoji, laughAudioURL: gwangro.audioFileName)
+  
+  let viewModel = DefaultRecordingViewModel(targetLearner: targetLearner)
 
   RecordingView(viewModel: viewModel)
 }

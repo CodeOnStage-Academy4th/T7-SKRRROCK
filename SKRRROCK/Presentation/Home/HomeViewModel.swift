@@ -7,7 +7,19 @@
 
 import SwiftUI
 
-protocol HomeViewModel {}
+protocol HomeViewModel {
+  func navigationToPersonalPage(_ targetLearner: TargetLearner)
+}
 
 @Observable
-class DefaultHomeViewModel: HomeViewModel {}
+class DefaultHomeViewModel: HomeViewModel {
+  private let appCoordinator: AppCoordinator?
+  
+  init(appCoordinator: AppCoordinator? = nil) {
+    self.appCoordinator = appCoordinator
+  }
+  
+  func navigationToPersonalPage(_ targetLearner: TargetLearner) {
+    appCoordinator?.push(.personalPage(targetLearner))
+  }
+}
