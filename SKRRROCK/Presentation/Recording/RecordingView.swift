@@ -44,6 +44,12 @@ struct RecordingView: View {
       }
       .foregroundStyle(ColorTokens.white)
     }
+    .navigationBarBackButtonHidden()
+    .toolbar {
+      ToolbarItem(placement: .navigation) {
+        BackButton()
+      }
+    }
     .onAppear {
       viewModel.startRecording()
     }

@@ -24,6 +24,10 @@ struct ResultView: View {
 
       VStack {
         if viewModel.isLoading {
+          Text("분석중...")
+            .font(FontTokens.headingMdMedium)
+            .foregroundColor(.white)
+          
           GradientLoading(size: 200, color: ColorTokens.slate800)
         } else {
           ZStack {
@@ -110,6 +114,7 @@ struct ResultView: View {
       }
       .padding()
     }
+    .navigationBarBackButtonHidden()
     .onAppear {
       viewModel.analyzeRecord()
     }
