@@ -19,6 +19,8 @@ class TargetLearner {
         guard let url = Bundle.main.url(forResource: laughAudioURL, withExtension: nil) else { return nil }
         return try? Data(contentsOf: url)
     }
+    @Relationship(deleteRule: .cascade, inverse: \ShadowingRecord.targetLearner)
+    var shadowingRecords: [ShadowingRecord] = []
     
     init(name: String, emoji: String, laughAudioURL: String) {
         self.id = UUID()
