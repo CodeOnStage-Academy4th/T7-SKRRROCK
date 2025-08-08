@@ -9,13 +9,61 @@ import Foundation
 import SwiftUI
 
 struct ResultView: View {
-  @State private var viewModel: ResultViewModel
+    @State private var viewModel: ResultViewModel
 
-  init(viewModel: ResultViewModel) {
-    self._viewModel = State(wrappedValue: viewModel)
-  }
+    init(viewModel: ResultViewModel) {
+        self._viewModel = State(wrappedValue: viewModel)
+    }
 
-  var body: some View {
-    EmptyView()
-  }
+    var body: some View {
+        ZStack {
+            //TODO: 배경색 변경 필요
+            Color.black
+                .ignoresSafeArea()
+            
+            VStack {
+                ZStack {
+                    Image("scoreBackground")
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.horizontal, 90)
+                    
+                    VStack {
+                        Text("SCORE")
+                            .font(.system(size: 17, weight: .medium))
+                            .foregroundColor(.white)
+                        
+                        Text("90")
+                            .font(.system(size: 80, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                }
+                
+                // MARK: 점수대 별 멘트 
+                VStack(spacing: 4) {
+                    Text("완전 똑같은데?")
+                        .font(.system(size: 32, weight: .medium))
+                    Text("당신 혹시 체리 아니에요?")
+                        .font(.system(size: 20, weight: .regular))
+                }
+                .foregroundColor(.white)
+                
+                Image("dance_1")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 256)
+                
+                
+                HStack{
+                    //TODO: 버튼 컴포넌트 이용해서 다시하기 / 랭킹 등록 만들어야함
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    let viewModel = DefaultResultViewModel()
+
+    ResultView(viewModel: viewModel)
 }
