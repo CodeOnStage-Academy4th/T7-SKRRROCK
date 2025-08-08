@@ -32,10 +32,26 @@ struct ResultView: View {
                         Text("SCORE")
                             .font(.system(size: 17, weight: .medium))
                             .foregroundColor(.white)
+                
                         
                         Text("\(viewModel.score)")
+                            .stroke(Color.white, lineWidth: 4)
+                            .tracking(4)
                             .font(.system(size: 80, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundStyle(
+                                LinearGradient(
+                                    gradient: Gradient(stops: [
+                                        .init(color: Color(hex: "0900FF"), location: 0.0),
+                                        .init(color: Color(hex: "FF00FB"), location: 0.5),
+                                        .init(color: Color(hex: "00A6FF"), location: 1.0)
+                                    ]),
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                        
+                          
+                            
                     }
                 }
                 
@@ -64,7 +80,7 @@ struct ResultView: View {
 
 #Preview {
     let viewModel = DefaultResultViewModel()
-    viewModel.score = 85
+    viewModel.score = 36
     viewModel.targetLearnerName = "광로"
     return ResultView(viewModel: viewModel)
 }
