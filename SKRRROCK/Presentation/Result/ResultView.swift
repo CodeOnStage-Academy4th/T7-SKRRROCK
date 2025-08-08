@@ -114,6 +114,7 @@ struct ResultView: View {
       }
       .padding()
     }
+    .navigationBarBackButtonHidden()
     .onAppear {
       viewModel.analyzeRecord()
     }

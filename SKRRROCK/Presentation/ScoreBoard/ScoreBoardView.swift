@@ -20,10 +20,13 @@ struct ScoreBoardView: View {
         .ignoresSafeArea()
       
       VStack {
+        Spacer()
+        
         Text("Ranking Board")
           .font(FontTokens.headingMdMedium)
         Text("나의 점수는 몇 점? 여기에서 확인하ROCK!")
           .font(FontTokens.bodyLgRegular)
+          .padding(.bottom, 80)
 
         VStack(spacing: 24) {
           Text("RANKING")
@@ -69,8 +72,10 @@ struct ScoreBoardView: View {
         .foregroundStyle(ColorTokens.white)
         .padding(.horizontal, 20)
         .padding(.vertical, 24)
-        .frame(maxWidth: .infinity, maxHeight: 320)
+        .frame(maxWidth: .infinity, maxHeight: 320, alignment: .top)
         .gradientBackground()
+        
+        Spacer()
         
         LargeButton(title: "홈으로", systemImage: "house") {
           viewModel.navigateToHome()
@@ -79,6 +84,7 @@ struct ScoreBoardView: View {
       .foregroundStyle(ColorTokens.white)
       .padding()
     }
+    .navigationBarBackButtonHidden()
   }
 }
 
