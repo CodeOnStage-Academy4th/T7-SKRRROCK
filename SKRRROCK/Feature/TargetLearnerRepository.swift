@@ -1,5 +1,5 @@
 //
-//  TargetLearnerManager.swift
+//  TargetLearnerRepository.swift
 //  SKRRROCK
 //
 //  Created by Jun on 8/9/25.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-class TargetLearnerManager {
+class TargetLearnerRepository {
     private let context: ModelContext
     
     init(context: ModelContext) {

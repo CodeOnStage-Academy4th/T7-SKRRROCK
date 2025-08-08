@@ -17,7 +17,7 @@ struct SKRRROCKApp: App {
         .modelContainer(for: [TargetLearner.self, ShadowingRecord.self]) { result in
             switch result {
             case .success(let container):
-                TargetLearnerManager.setupDefaultLearners(context: container.mainContext)
+                TargetLearnerRepository.setupDefaultLearners(context: container.mainContext)
             case .failure(let error):
                 print("ModelContainer 생성 실패: \(error)")
             }

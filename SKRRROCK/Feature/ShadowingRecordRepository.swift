@@ -1,5 +1,5 @@
 //
-//  ShadowingRecordManager.swift
+//  ShadowingRecordRepository.swift
 //  SKRRROCK
 //
 //  Created by Jun on 8/9/25.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-class ShadowingRecordManager {
+class ShadowingRecordRepository {
     private let context: ModelContext
     
     init(context: ModelContext) {
