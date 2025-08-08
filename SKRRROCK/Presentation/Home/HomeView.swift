@@ -15,7 +15,32 @@ struct HomeView: View {
   }
 
   var body: some View {
-    EmptyView()
+    ZStack {
+      ColorTokens.slate800
+        .ignoresSafeArea()
+
+      VStack(spacing: 80) {
+        VStack {
+          Text("오늘 한번 웃어볼ROCK?")
+            .font(FontTokens.headingMdMedium)
+            .foregroundStyle(ColorTokens.white)
+          Text("듣고 따라 웃어보자! 푸하하하하항 SKRRR~")
+            .font(FontTokens.bodyLgRegular)
+            .foregroundStyle(ColorTokens.white)
+        }
+
+        LazyVGrid(
+          columns: Array(repeating: GridItem(spacing: 20), count: 2),
+          spacing: 20
+        ) {
+          HomePersonGridItem(name: "광로", image: "Gwangro")
+          HomePersonGridItem(name: "체리", image: "Cherry")
+          HomePersonGridItem(name: "에디", image: "Eddey")
+          HomePersonGridItem(name: "세나", image: "Sena")
+        }
+      }
+      .padding()
+    }
   }
 }
 
