@@ -39,18 +39,24 @@ struct RecordingView: View {
                     viewModel.navigateToResult()
                 }
 
-                Text("웃음 녹음중...")
-                    .font(FontTokens.headingSmRegular)
-            }
-            .foregroundStyle(ColorTokens.white)
-        }
-        .onAppear {
-            viewModel.startRecording()
-        }
-        .onDisappear {
-            viewModel.stopRecording()
-        }
+        Text("웃음 녹음중...")
+          .font(FontTokens.headingSmRegular)
+      }
+      .foregroundStyle(ColorTokens.white)
     }
+    .navigationBarBackButtonHidden()
+    .toolbar {
+      ToolbarItem(placement: .navigation) {
+        BackButton()
+      }
+    }
+    .onAppear {
+      viewModel.startRecording()
+    }
+    .onDisappear {
+      viewModel.stopRecording()
+    }
+  }
 }
 
 #Preview {

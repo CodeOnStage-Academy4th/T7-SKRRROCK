@@ -41,7 +41,6 @@ struct PersonalPageView: View {
           if viewModel.sortedRecords.isEmpty {
             Text("처음 기록을 세워보세요.")
               .opacity(0.5)
-            Spacer()
           } else {
             ForEach(
               Array(
@@ -79,7 +78,7 @@ struct PersonalPageView: View {
         .foregroundStyle(ColorTokens.white)
         .padding(.horizontal, 20)
         .padding(.vertical, 24)
-        .frame(maxWidth: .infinity, maxHeight: 320)
+        .frame(maxWidth: .infinity, maxHeight: 320, alignment: .top)
         .gradientBackground()
 
         LargeButton(title: "따라하기", systemImage: "mic", colored: true) {
@@ -87,6 +86,12 @@ struct PersonalPageView: View {
         }
       }
       .padding(.horizontal, 40)
+    }
+    .navigationBarBackButtonHidden()
+    .toolbar {
+      ToolbarItem(placement: .navigation) {
+        BackButton()
+      }
     }
   }
 }

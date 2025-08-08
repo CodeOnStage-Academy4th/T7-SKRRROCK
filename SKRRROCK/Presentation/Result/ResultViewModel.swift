@@ -144,9 +144,10 @@ class DefaultResultViewModel: ResultViewModel {
     func analyzeRecord() {
         isLoading = true
 
-        defer {
-            self.isLoading = false
-        }
+    Task {
+      try? await Task.sleep(for: .seconds(3))
+      self.isLoading = false
+    }
 
         // TODO: 녹음 비교 분석 로직
         try? analyzer.analyzeLaugh(url: Bundle.main.url(forResource: resultViewData.targetLearner.laughAudioURL, withExtension: nil) ?? URL(fileURLWithPath: ""))
