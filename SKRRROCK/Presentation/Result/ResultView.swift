@@ -125,7 +125,7 @@ struct ResultView: View {
   )
 
   let viewModel = DefaultResultViewModel(
-    resultViewData: ResultViewData(targetLearner: targetLearner)
+    resultViewData: ResultViewData(targetLearner: targetLearner, audioData: Data())
   )
 
   return ResultView(viewModel: viewModel)
