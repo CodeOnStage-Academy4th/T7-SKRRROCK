@@ -30,35 +30,30 @@ struct PersonalPageView: View {
         VStack(spacing: 24) {
           Text("RANKING")
 
-          ScrollView {
-            LazyVStack(spacing: 24) {
-              ForEach(1..<6) { rank in
-                HStack {
-                  Group {
-                    switch rank {
-                    case 1:
-                      Image("GoldMedal")
-                    case 2:
-                      Image("SilverMedal")
-                    case 3:
-                      Image("BronzeMedal")
-                    default:
-                      Text("\(rank)th")
-                    }
-                  }
-                  .frame(maxWidth: 40)
-                  Text("프라이데이")
-                  Spacer()
-                  Text("99점")
-                }
-                .frame(maxHeight: 30)
-                .if(rank == 1) { view in
-                  view.foregroundStyle(ColorTokens.yellow500)
+          ForEach(1..<6) { rank in
+            HStack {
+              Group {
+                switch rank {
+                case 1:
+                  Image("GoldMedal")
+                case 2:
+                  Image("SilverMedal")
+                case 3:
+                  Image("BronzeMedal")
+                default:
+                  Text("\(rank)th")
                 }
               }
+              .frame(maxWidth: 40)
+              Text("프라이데이")
+              Spacer()
+              Text("99점")
+            }
+            .frame(maxHeight: 30)
+            .if(rank == 1) { view in
+              view.foregroundStyle(ColorTokens.yellow500)
             }
           }
-          .frame(maxHeight: 232)
         }
         .font(FontTokens.headingSmMedium)
         .foregroundStyle(ColorTokens.white)
