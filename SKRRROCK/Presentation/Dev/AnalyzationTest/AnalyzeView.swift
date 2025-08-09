@@ -12,6 +12,20 @@ struct AnalyzeView: View {
     let audioData: Data
 
     @State private var analyzer = LaughAnalyzerDev()
+    func exaggerateScore(_ x: Float, low: Float = 60, high: Float = 95) -> Float {
+        if x <= low { return 0 }           // 70 이하 → 0점
+        if x >= high { return 100 }        // 95 이상 → 100점
+        
+        // 70~95 구간을 0~1로 정규화
+        let t = (x - low) / (high - low)   // 0 ~ 1
+        
+        // 곡선 적용 (p<1이면 하단 눌리고 상단 급상승)
+        let p: Float = 0.3
+        let scaled = pow(t, p)
+        
+        return scaled * 100
+    }
+
 
     var body: some View {
         ScrollView {
@@ -91,11 +105,25 @@ struct AnalyzeView: View {
 
                 // 제네릭으로 개선된 dtwSimilarity 함수를 호출합니다.
                 // x, y에는 MFCC 데이터([[Float]])를, dist에는 위에서 정의한 유클리드 거리 함수를 전달합니다.
-                let mfccResult = dtw.dtwSimilarity(
+                let mfccRaw = dtw.dtwSimilarity(
                     x: analyzer.targetResult.mfccData,
                     y: analyzer.userResult.mfccData,
                     dist: cosineDistance
                 )
+                
+                let minFrameCount = 60000 // 최소 프레임(=길이) 기준, 약 0.3~0.5초 정도
+                let actualFrameCount = analyzer.userResult.mfccData.count
+                
+                // 비율 계산
+                let ratio = min(1.0, Float(actualFrameCount) / Float(minFrameCount))
+
+                // 지수 적용 (3~5 권장, 높을수록 더 급격히 깎임)
+                let penaltyPower: Float = 10.0
+                let lengthRatio = pow(ratio, penaltyPower)
+
+                // 점수 계산
+                let mfccResult = exaggerateScore(mfccRaw, low: 60, high: 90) * lengthRatio
+
 //                print("-----------")
 //                print(analyzer.targetResult.mfccData)
 //                print(analyzer.userResult.mfccData)

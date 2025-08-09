@@ -30,32 +30,42 @@ struct ResultView: View {
           
           GradientLoading(size: 200, color: ColorTokens.slate800)
         } else {
-          ZStack {
-            Image("scoreBackground")
-              .resizable()
-              .scaledToFit()
-              .padding(.horizontal, 90)
-            
-            VStack {
-              Text("SCORE")
-                .font(FontTokens.bodyLgMedium)
-                .foregroundColor(.white)
-              
-              Text("\(viewModel.score)")
-                .font(.custom(FontTokens.goormSansBold, size: 80))
-                .foregroundStyle(
-                  LinearGradient(
-                    gradient: Gradient(stops: [
-                      .init(color: Color(hex: "0900FF"), location: 0.0),
-                      .init(color: Color(hex: "FF00FB"), location: 0.5),
-                      .init(color: Color(hex: "00A6FF"), location: 1.0),
-                    ]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                  )
-                )
+            ZStack {
+                Image("scoreBackground")
+                    .resizable()
+                    .scaledToFit()
+                    .padding(.horizontal, 90)
+                
+                VStack {
+                    Text("SCORE")
+                        .font(FontTokens.bodyLgMedium)
+                        .foregroundColor(.white)
+                    
+                    ZStack {
+                        ForEach(0..<24, id: \.self) { i in
+                            let theta = 2 * .pi * CGFloat(i) / CGFloat(24)
+                            Text("\(viewModel.score)")
+                                .font(Font.custom(FontTokens.goormSansBold, size: 80))
+                                .foregroundColor(.white)
+                                .offset(x: cos(theta) * 6, y: sin(theta) * 6)
+                        }
+                        
+                        Text("\(viewModel.score)")
+                            .font(Font.custom(FontTokens.goormSansBold, size: 80))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    gradient: Gradient(stops: [
+                                        .init(color: Color(hex: "0900FF"), location: 0.0),
+                                        .init(color: Color(hex: "FF00FB"), location: 0.5),
+                                        .init(color: Color(hex: "00A6FF"), location: 1.0),
+                                    ]),
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
+                    }
+                }
             }
-          }
           
           // MARK: 점수대 별 멘트
           VStack(spacing: 4) {

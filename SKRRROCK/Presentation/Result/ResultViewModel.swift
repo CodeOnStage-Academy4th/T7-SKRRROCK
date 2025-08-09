@@ -67,7 +67,7 @@ class DefaultResultViewModel: ResultViewModel {
         case 90 ... 99:
             return "웃음이 너~무 똑같아서"
         case 80 ... 89:
-            return "\(targetLearnerName)이 완~전 심쿵!"
+            return "\(targetLearnerName) 완~전 심쿵!"
         case 70 ... 79:
             return "피치 Good~ 성량 Good~"
         case 60 ... 69:
@@ -90,9 +90,9 @@ class DefaultResultViewModel: ResultViewModel {
     func getSecondMessage() -> String {
         switch score {
         case 100:
-            return "당신 혹시 \(targetLearnerName)아니세요?"
+            return "당신 혹시 \(targetLearnerName) 아니세요?"
         case 90 ... 99:
-            return "\(targetLearnerName)이 기절!"
+            return "\(targetLearnerName) 기절!"
         case 80 ... 89:
             return "정말 멋져요잉"
         case 70 ... 79:
@@ -126,7 +126,7 @@ class DefaultResultViewModel: ResultViewModel {
             return "\(rawValue)_dance"
         }
 
-        return "dance_1"
+        return "cherry_dance"
     }
 
     func retry() {
